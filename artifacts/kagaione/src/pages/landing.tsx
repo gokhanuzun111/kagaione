@@ -5,6 +5,8 @@ export default function Landing() {
   return (
     <div className="min-h-[100dvh] bg-background text-foreground flex flex-col relative overflow-hidden">
       <div className="scanline"></div>
+      <div className="noise-overlay"></div>
+      <div className="vignette"></div>
       <div className="absolute inset-0 ambient-gradient"></div>
       
       <header className="absolute top-0 w-full p-6 flex justify-between items-center z-10">
@@ -24,7 +26,7 @@ export default function Landing() {
         
         <div className="flex flex-col items-center gap-4">
           <Link href="/sign-up">
-            <Button size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90 text-lg px-8 py-6 rounded-none tracking-widest uppercase transition-all shadow-[0_0_20px_rgba(201,168,76,0.3)] hover:shadow-[0_0_40px_rgba(201,168,76,0.5)]">
+            <Button size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90 text-lg px-8 py-6 rounded-none tracking-widest uppercase transition-all shadow-[0_0_25px_hsl(42_100%_58%_/_0.35)] hover:shadow-[0_0_50px_hsl(42_100%_58%_/_0.55),0_0_100px_hsl(42_100%_58%_/_0.15)]">
               Enter the Simulation
             </Button>
           </Link>

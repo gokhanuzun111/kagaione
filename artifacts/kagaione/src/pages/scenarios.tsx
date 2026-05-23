@@ -74,7 +74,7 @@ export default function Scenarios() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {SCENARIOS.map(s => (
-              <div key={s.id} className="border border-white/10 bg-[#0a0a0a] p-6 hover:border-primary/50 transition-colors flex flex-col group relative overflow-hidden">
+              <div key={s.id} className="border border-white/8 bg-card p-6 hover:border-primary/40 transition-all duration-300 flex flex-col group relative overflow-hidden shimmer-border">
                 <div className="absolute top-0 right-0 w-20 h-20 bg-primary/5 blur-[50px] group-hover:bg-primary/20 transition-all"></div>
                 
                 <div className="flex justify-between items-start mb-4 relative z-10">
