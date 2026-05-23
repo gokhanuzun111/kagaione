@@ -1,15 +1,18 @@
 openapi: 3.1.0
 info:
-  # Do not change the title, if the title changes, the import paths will be broken
   title: Api
   version: 0.1.0
-  description: API specification
+  description: KAGAIONE API specification
 servers:
   - url: /api
     description: Base API path
 tags:
   - name: health
     description: Health operations
+  - name: game
+    description: KAGAIONE game state and narrative operations
+  - name: openai
+    description: OpenAI AI chat and narrative operations
 paths:
   /healthz:
     get:
@@ -24,6 +27,357 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+
+  /game/sessions:
+    get:
+      operationId: listGameSessions
+      tags: [game]
+      summary: List all game sessions for the current user
+      responses:
+        "200":
+          description: List of game sessions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/GameSession"
+    post:
+      operationId: createGameSession
+      tags: [game]
+      summary: Create a new game session
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GameSessionInput"
+      responses:
+        "201":
+          description: Created session
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GameSession"
+
+  /game/sessions/{id}:
+    get:
+      operationId: getGameSession
+      tags: [game]
+      summary: Get game session with messages and stats
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Game session detail
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GameSessionDetail"
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+    patch:
+      operationId: updateGameSession
+      tags: [game]
+      summary: Update game session stats or summary
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GameSessionUpdate"
+      responses:
+        "200":
+          description: Updated session
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GameSession"
+    delete:
+      operationId: deleteGameSession
+      tags: [game]
+      summary: Delete a game session
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Deleted
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+
+  /game/sessions/{id}/narrate:
+    post:
+      operationId: narrateGameAction
+      tags: [game]
+      summary: Send a player action and receive a streaming AI narrative response
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/NarrateInput"
+      responses:
+        "200":
+          description: SSE stream of narrative chunks and state updates
+          content:
+            text/event-stream: {}
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+
+  /game/sessions/{id}/messages:
+    get:
+      operationId: listGameMessages
+      tags: [game]
+      summary: List messages in a game session
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: List of messages
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/GameMessage"
+
+  /game/world-feed:
+    get:
+      operationId: getWorldFeed
+      tags: [game]
+      summary: Get the global world feed events
+      responses:
+        "200":
+          description: World feed events
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/WorldFeedEvent"
+
+  /game/world-feed/generate:
+    post:
+      operationId: generateWorldFeedEvent
+      tags: [game]
+      summary: Generate a new AI world feed event
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/WorldFeedGenerateInput"
+      responses:
+        "201":
+          description: Generated world feed event
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WorldFeedEvent"
+
+  /game/user-profile:
+    get:
+      operationId: getUserProfile
+      tags: [game]
+      summary: Get or create the current user's profile
+      responses:
+        "200":
+          description: User profile
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserProfile"
+    patch:
+      operationId: updateUserProfile
+      tags: [game]
+      summary: Update user profile settings
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserProfileUpdate"
+      responses:
+        "200":
+          description: Updated profile
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserProfile"
+
+  /openai/conversations:
+    get:
+      operationId: listOpenaiConversations
+      tags: [openai]
+      summary: List all conversations
+      responses:
+        "200":
+          description: List of conversations
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/OpenaiConversation"
+    post:
+      operationId: createOpenaiConversation
+      tags: [openai]
+      summary: Create a new conversation
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OpenaiConversationInput"
+      responses:
+        "201":
+          description: Created conversation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OpenaiConversation"
+
+  /openai/conversations/{id}:
+    get:
+      operationId: getOpenaiConversation
+      tags: [openai]
+      summary: Get conversation with messages
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Conversation with messages
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OpenaiConversationWithMessages"
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OpenaiError"
+    delete:
+      operationId: deleteOpenaiConversation
+      tags: [openai]
+      summary: Delete a conversation
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Deleted
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OpenaiError"
+
+  /openai/conversations/{id}/messages:
+    get:
+      operationId: listOpenaiMessages
+      tags: [openai]
+      summary: List messages in a conversation
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: List of messages
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/OpenaiMessage"
+    post:
+      operationId: sendOpenaiMessage
+      tags: [openai]
+      summary: Send a text message and receive a streaming text response
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OpenaiMessageInput"
+      responses:
+        "200":
+          description: SSE stream of assistant text chunks
+          content:
+            text/event-stream: {}
+
+  /openai/generate-image:
+    post:
+      operationId: generateOpenaiImage
+      tags: [openai]
+      summary: Generate an image from a text prompt
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OpenaiImageInput"
+      responses:
+        "200":
+          description: Generated image data
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OpenaiImageOutput"
+
 components:
   schemas:
     HealthStatus:
@@ -34,3 +388,363 @@ components:
       required:
         - status
 
+    ApiError:
+      type: object
+      properties:
+        error:
+          type: string
+      required:
+        - error
+
+    GameStats:
+      type: object
+      properties:
+        influence:
+          type: integer
+        wealth:
+          type: integer
+        trust:
+          type: integer
+        reputation:
+          type: integer
+        stability:
+          type: integer
+        desire:
+          type: integer
+        risk:
+          type: integer
+      required:
+        - influence
+        - wealth
+        - trust
+        - reputation
+        - stability
+        - desire
+        - risk
+
+    GameSession:
+      type: object
+      properties:
+        id:
+          type: integer
+        userId:
+          type: string
+        scenarioId:
+          type: string
+        scenarioTitle:
+          type: string
+        paceMode:
+          type: string
+          enum: [hourly, daily, long]
+        status:
+          type: string
+          enum: [active, completed, abandoned]
+        stats:
+          $ref: "#/components/schemas/GameStats"
+        storySummary:
+          type: ["string", "null"]
+        hiddenNotes:
+          type: ["string", "null"]
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - userId
+        - scenarioId
+        - scenarioTitle
+        - paceMode
+        - status
+        - stats
+        - createdAt
+        - updatedAt
+
+    GameSessionDetail:
+      type: object
+      properties:
+        id:
+          type: integer
+        userId:
+          type: string
+        scenarioId:
+          type: string
+        scenarioTitle:
+          type: string
+        paceMode:
+          type: string
+          enum: [hourly, daily, long]
+        status:
+          type: string
+          enum: [active, completed, abandoned]
+        stats:
+          $ref: "#/components/schemas/GameStats"
+        storySummary:
+          type: ["string", "null"]
+        hiddenNotes:
+          type: ["string", "null"]
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        messages:
+          type: array
+          items:
+            $ref: "#/components/schemas/GameMessage"
+      required:
+        - id
+        - userId
+        - scenarioId
+        - scenarioTitle
+        - paceMode
+        - status
+        - stats
+        - createdAt
+        - updatedAt
+        - messages
+
+    GameSessionInput:
+      type: object
+      properties:
+        scenarioId:
+          type: string
+        scenarioTitle:
+          type: string
+        paceMode:
+          type: string
+          enum: [hourly, daily, long]
+        customPremise:
+          type: ["string", "null"]
+      required:
+        - scenarioId
+        - scenarioTitle
+        - paceMode
+
+    GameSessionUpdate:
+      type: object
+      properties:
+        stats:
+          $ref: "#/components/schemas/GameStats"
+        storySummary:
+          type: string
+        hiddenNotes:
+          type: string
+        status:
+          type: string
+          enum: [active, completed, abandoned]
+
+    GameMessage:
+      type: object
+      properties:
+        id:
+          type: integer
+        sessionId:
+          type: integer
+        role:
+          type: string
+          enum: [narrator, player, system]
+        content:
+          type: string
+        choices:
+          type: ["string", "null"]
+        statsSnapshot:
+          type: ["string", "null"]
+        createdAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - sessionId
+        - role
+        - content
+        - createdAt
+
+    NarrateInput:
+      type: object
+      properties:
+        playerAction:
+          type: string
+        maturityLevel:
+          type: string
+          enum: [low, medium, high]
+      required:
+        - playerAction
+
+    WorldFeedEvent:
+      type: object
+      properties:
+        id:
+          type: integer
+        username:
+          type: string
+        eventText:
+          type: string
+        impact:
+          type: string
+          enum: [low, medium, high]
+        createdAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - username
+        - eventText
+        - impact
+        - createdAt
+
+    WorldFeedGenerateInput:
+      type: object
+      properties:
+        sessionId:
+          type: ["integer", "null"]
+        context:
+          type: ["string", "null"]
+
+    UserProfile:
+      type: object
+      properties:
+        id:
+          type: integer
+        userId:
+          type: string
+        username:
+          type: ["string", "null"]
+        soundEnabled:
+          type: boolean
+        maturityLevel:
+          type: string
+          enum: [low, medium, high]
+        narrativePace:
+          type: string
+          enum: [hourly, daily, long]
+        tier:
+          type: string
+          enum: [free, premium, elite]
+        createdAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - userId
+        - soundEnabled
+        - maturityLevel
+        - narrativePace
+        - tier
+        - createdAt
+
+    UserProfileUpdate:
+      type: object
+      properties:
+        username:
+          type: string
+        soundEnabled:
+          type: boolean
+        maturityLevel:
+          type: string
+          enum: [low, medium, high]
+        narrativePace:
+          type: string
+          enum: [hourly, daily, long]
+
+    OpenaiConversation:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - title
+        - createdAt
+
+    OpenaiMessage:
+      type: object
+      properties:
+        id:
+          type: integer
+        conversationId:
+          type: integer
+        role:
+          type: string
+        content:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - conversationId
+        - role
+        - content
+        - createdAt
+
+    OpenaiConversationInput:
+      type: object
+      properties:
+        title:
+          type: string
+      required:
+        - title
+
+    OpenaiMessageInput:
+      type: object
+      properties:
+        content:
+          type: string
+      required:
+        - content
+
+    OpenaiConversationWithMessages:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        messages:
+          type: array
+          items:
+            $ref: "#/components/schemas/OpenaiMessage"
+      required:
+        - id
+        - title
+        - createdAt
+        - messages
+
+    OpenaiImageInput:
+      type: object
+      properties:
+        prompt:
+          type: string
+        size:
+          type: string
+          enum: ["1024x1024", "512x512", "256x256"]
+      required:
+        - prompt
+
+    OpenaiImageOutput:
+      type: object
+      properties:
+        b64_json:
+          type: string
+      required:
+        - b64_json
+
+    OpenaiError:
+      type: object
+      properties:
+        error:
+          type: string
+      required:
+        - error

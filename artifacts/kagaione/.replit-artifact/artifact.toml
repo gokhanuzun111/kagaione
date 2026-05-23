@@ -1,0 +1,31 @@
+kind = "web"
+previewPath = "/"
+title = "KAGAIONE"
+version = "1.0.0"
+id = "artifacts/kagaione"
+router = "path"
+
+[[integratedSkills]]
+name = "react-vite"
+version = "1.0.0"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 25392
+
+[services.development]
+run = "pnpm --filter @workspace/kagaione run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/kagaione", "run", "build" ]
+publicDir = "artifacts/kagaione/dist/public"
+serve = "static"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "25392"
+BASE_PATH = "/"

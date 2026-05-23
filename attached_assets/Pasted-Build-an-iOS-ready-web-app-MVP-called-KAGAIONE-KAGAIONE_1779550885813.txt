@@ -1,0 +1,217 @@
+Build an iOS-ready web app MVP called KAGAIONE.
+
+KAGAIONE is an 18+ AI-driven cinematic narrative simulation platform. It is NOT a violent game. No physical violence, no gore, no weapons, no killing. The experience is based on psychological tension, adult choices, relationships, power, status, career, secrecy, manipulation, money, identity, ambition and consequence.
+
+Core concept:
+Users enter living AI-generated alternative worlds. Each player may be part of the same story world with other users, but roles are hidden. Players can see usernames inside the story world, but they do not know who is CEO, journalist, investor, rival, political figure, AI character, etc. Some characters may be real players, some may be AI-generated. The uncertainty is part of the experience.
+
+Tone:
+Premium, cinematic, minimal, dark, elegant, Apple-like UI. Think Black Mirror + interactive fiction + AI life simulator + psychological RPG. No childish game UI. No cartoon style.
+
+MVP must include:
+
+1. Landing / onboarding
+- Dark premium intro screen
+- Logo text: KAGAIONE
+- Tagline: “Live another life. Shape a hidden world.”
+- 18+ confirmation
+- Short explanation of the concept
+- Start button
+
+2. Auth
+- Email/password login
+- Guest mode if easy
+- Firebase or Supabase preferred
+
+3. Scenario selection screen
+Create several starting scenario cards:
+- Founder: You are building an AI company under pressure.
+- Elite Circle: You enter a private world of money, influence and secrets.
+- Parallel Life: You live a completely different adult life.
+- Crisis Room: A company, family or public reputation crisis unfolds.
+- Long Simulation: A slow life simulation that evolves over weeks.
+- Custom Scenario: User writes their own premise.
+
+Each card should show:
+- title
+- short description
+- pace: Hourly / Daily / Long
+- intensity level
+- premium locked badge for some cards
+
+4. Main game screen
+Chat-like cinematic narrative interface:
+- AI narrator text
+- user choices as buttons
+- free text input
+- status panel
+- ambient background image area
+- subtle audio ambience toggle
+
+The AI should narrate events and give choices. User can either tap choices or write their own action.
+
+5. Game state system
+Track simple stats:
+- Influence
+- Wealth
+- Trust
+- Reputation
+- Stability
+- Desire / Relationship tension
+- Risk
+
+Stats should update after user choices.
+
+6. Hidden role shared-world concept
+For MVP, simulate multiplayer even if real multiplayer is not ready.
+Create a “World Feed” showing fictional/AI-generated usernames:
+- NOX_17
+- KAIR0
+- VANTA
+- SOLACE
+- MIRA_9
+- ECHO
+
+Feed examples:
+- “VANTA released a statement that changed the market mood.”
+- “NOX_17 made a private move. Its effect is not yet visible.”
+- “SOLACE gained influence inside the circle.”
+- “Someone has started a quiet campaign against you.”
+
+Important:
+Do not reveal roles.
+Never say directly who is real and who is AI.
+Maintain mystery.
+
+7. Time modes
+Implement scenario pacing:
+- Hourly Mode: fast events, urgent tone
+- Daily Mode: 1-3 important events per day style
+- Long Simulation: slow evolving life/world simulation
+
+In MVP this can be simulated through labels and different narrative tone.
+
+8. Safety / content rules
+The app must enforce:
+- No physical violence
+- No gore
+- No killing
+- No weapons focus
+- No minors in romantic/adult contexts
+- No explicit pornography
+- Adult romance and sensual tension can exist, but must remain cinematic, emotional and non-explicit
+- Psychological tension is allowed
+- Power games, secrets, betrayal, ambition, relationship drama and ethical decisions are allowed
+
+9. AI integration
+Use OpenAI API.
+Create a server-side API route so the API key is never exposed on the client.
+
+AI system prompt must define KAGAIONE as:
+- cinematic narrator
+- world simulation engine
+- hidden-role orchestrator
+- psychological tension designer
+- non-violent adult narrative controller
+
+AI should:
+- continue the story based on current state
+- provide 3-5 choices
+- update stats
+- mention hidden users/world events sometimes
+- maintain mystery
+- avoid explicit/violent content
+- keep a premium cinematic writing style
+
+10. Memory
+Store:
+- user profile
+- selected scenario
+- current story summary
+- last 20 messages
+- stats
+- world feed events
+- hidden narrative notes
+
+Use Firebase/Supabase/local database depending on what is easiest.
+
+11. UI style
+Use:
+- black / near black background
+- white and gray typography
+- subtle gold or electric blue accent
+- large spacing
+- premium cards
+- smooth transitions
+- mobile-first responsive design
+- iOS safe area support
+- PWA install support if possible
+
+12. Monetization placeholders
+Add pricing screen:
+Free:
+- limited scenarios
+- shorter memory
+- standard narrative
+
+Premium:
+- deeper memory
+- premium scenarios
+- relationship arcs
+- longer simulations
+- more cinematic events
+
+Elite:
+- exclusive worlds
+- longer AI memory
+- custom universe creation
+- advanced hidden-role simulations
+
+No real payment integration required in MVP. Add placeholder buttons.
+
+13. Settings
+Include:
+- sound on/off
+- mature content intensity: Low / Medium / High
+- narrative pace
+- delete story
+- start new life
+
+14. Required pages/components
+- LandingPage
+- Onboarding18Plus
+- AuthPage
+- ScenarioSelect
+- GameScreen
+- WorldFeed
+- StatsPanel
+- PricingPage
+- SettingsPage
+- API route for AI generation
+
+15. Example opening story for Founder scenario:
+“2031. Istanbul.
+Your AI company is running out of time.
+The board is silent. Your CTO has disappeared from the internal channel. Three investors are waiting for your answer before midnight.
+Then a private invitation arrives.
+No sender. No logo.
+Only one line:
+‘The room is ready for you.’”
+
+Choices:
+- Go to the private meeting.
+- Call the CTO.
+- Ignore the invitation and prepare the investor deck.
+- Ask someone you trust to investigate.
+- Write your own action.
+
+16. Deliverable
+Build a working MVP with clean code, beautiful UI, sample AI flow, mock world feed, persistent game state and clear structure for future real multiplayer.
+
+Use modern best practices.
+Prefer Next.js + React + TypeScript + Tailwind if building web/PWA.
+If building mobile-first only, still make it responsive and App Store wrapper friendly.
+Keep the code organized, commented and easy for one iOS developer to continue.
+
+Important final instruction:
+Do not build a generic chatbot. Build a cinematic AI narrative simulation interface with hidden-world mechanics, stats, choices, world feed and premium atmosphere.
