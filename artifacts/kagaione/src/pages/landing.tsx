@@ -16,10 +16,10 @@ export default function Landing() {
 
       <main className="flex-1 flex flex-col items-center justify-center text-center p-6 z-10">
         <h1 className="text-5xl md:text-7xl font-bold tracking-tighter mb-6">
-          Live another life.<br/>Shape a hidden world.
+          Shape a hidden world.
         </h1>
         <p className="text-xl text-muted-foreground max-w-2xl mb-12 font-light">
-          A premium cinematic AI narrative simulation. Not a game. Not a chat app. An experience that remembers your choices and shapes a psychological thriller around your identity.
+          A cinematic AI narrative game where your choices carry real weight. Enter a world of power, secrets, ambition and consequence — and discover who you truly are under pressure.
         </p>
         
         <div className="flex flex-col items-center gap-4">
